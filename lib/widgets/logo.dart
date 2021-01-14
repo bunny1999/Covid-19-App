@@ -36,7 +36,7 @@ class CustomLogo extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left:16,top: 12),
+                margin: EdgeInsets.only(left:15,top: 12),
                 child: Image(
                   height: 120,
                   width: 120,

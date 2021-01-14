@@ -13,6 +13,7 @@ import 'package:covid_app/screens/home/widgets/heading.dart';
 import 'package:covid_app/screens/home/widgets/hospital_card.dart';
 import 'package:covid_app/screens/home/widgets/round_croner_container.dart';
 import 'package:covid_app/screens/home/widgets/sub_container.dart';
+import 'package:covid_app/screens/medical_college_screen.dart';
 import 'package:covid_app/screens/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -352,7 +353,14 @@ class StateDeatils extends StatelessWidget {
           SubContainers(
             child: ListTile(
               onTap: (){
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context){
+                    return MedicalCollegeScreen(
+                      medicalCollegeModels: stateModel.medicalColleges,
+                    );
+                  }),
+                );
               },
               leading: Text(stateModel.medicalColleges!=null
                 ?stateModel.medicalColleges.length.toString():"0",textScaleFactor: 1.5,style: TextStyle(fontWeight: FontWeight.bold),
