@@ -1,4 +1,5 @@
 import 'package:covid_app/bloc/app_bloc.dart';
+import 'package:covid_app/bloc/app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:covid_app/constant/colors.dart';
@@ -10,7 +11,7 @@ class ServerFailed extends StatelessWidget {
   //IF POSSIBLE FIND COMMAN SOLUTION
   @override
   Widget build(BuildContext context) {
-    final weatherBloc = BlocProvider.of<AppBloc>(context);
+    final appBloc = BlocProvider.of<AppBloc>(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -20,7 +21,7 @@ class ServerFailed extends StatelessWidget {
           RaisedButton(
             color: secoundaryColor,
             onPressed: ()async{
-              // weatherBloc.add(FeatchStates());
+              appBloc.add(FeatchStates());
             },
             child: Text("Refresh")
           )
