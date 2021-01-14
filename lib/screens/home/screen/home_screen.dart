@@ -4,6 +4,7 @@ import 'package:covid_app/bloc/app_events.dart';
 import 'package:covid_app/bloc/app_states.dart';
 import 'package:covid_app/constant/text.dart';
 import 'package:covid_app/helper/helper_functions.dart';
+import 'package:covid_app/model/global_model.dart';
 import 'package:covid_app/model/state_model.dart';
 import 'package:covid_app/screens/home/widgets/date_picker.dart';
 import 'package:covid_app/screens/home/widgets/drop_down.dart';
@@ -122,8 +123,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
       body: BlocBuilder<AppBloc,AppState>(
         builder: (context,state){
           if(state is StatesAreLoaded){
-            //TODO:
-            _activeStateModel.value=state.getStateModels[0];
             _activeCaseDateRange.value=state.getGlobalModel.globalCasesModel;
             return Container(
               child:ValueListenableBuilder(
@@ -206,7 +205,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                 ?StateDeatils(
                                   stateModel: _activeStateModelNotifi,
                                 )
-                                :GlobalDetails(),
+                                :GlobalDetails(
+                                  globalModel: state.getGlobalModel,
+                                ),
                             ]
                           )
                         )
@@ -227,12 +228,72 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
 
 
 class GlobalDetails extends StatelessWidget {
-  
+  GlobalModel globalModel;
+  GlobalDetails({this.globalModel});
 
   @override
   Widget build(BuildContext context) {
+    Future<void> _makePhoneCall(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
     return Container(
-      
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Heading("Helpline"),
+          SubContainers(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children:[
+                ListTile(
+                  title: Text(
+                    globalModel.number!=null
+                      ?globalModel.number
+                      :"NIll"
+                  ),
+                  trailing:IconButton(
+                    icon: Icon(Icons.call,color: primaryColor,),
+                    onPressed: () async{
+                      await _makePhoneCall(globalModel.number);
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    globalModel.email!=null
+                      ?globalModel.email
+                      :"NIll"
+                  ),
+                  trailing:IconButton(
+                    icon: Icon(Icons.email,color: primaryColor,),
+                    onPressed: () async{
+                      await _makePhoneCall(globalModel.number);
+                    },
+                  ),
+                )
+              ]
+            ),
+          ),
+          Heading("Hospitals"),
+          HospitalCard(
+            ruralStr: "Rural Hospitals",
+            ruralValue: globalModel.ruralHospitals,
+            urbanStr: "Urban Hospitals",
+            urbanValue: globalModel.urbanHospitals
+          ),
+          Heading("Beds"),
+          HospitalCard(
+            ruralStr: "Rural Beds",
+            ruralValue: globalModel.ruralBeds,
+            urbanStr: "Urban Beds",
+            urbanValue: globalModel.urbanBeds
+          ),
+        ],
+      ),
     );
   }
 }
