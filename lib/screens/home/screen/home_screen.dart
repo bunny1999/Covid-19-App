@@ -353,13 +353,15 @@ class StateDeatils extends StatelessWidget {
           SubContainers(
             child: ListTile(
               onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context){
-                    return MedicalCollegeScreen(
+                showModalBottomSheet(
+                  context:context, 
+                  isScrollControlled: true,
+                  builder:(context)=>Container(
+                    height: MediaQuery.of(context).size.height * 0.965,
+                    child: MedicalCollegeScreen(
                       medicalCollegeModels: stateModel.medicalColleges,
-                    );
-                  }),
+                    ),
+                  )
                 );
               },
               leading: Text(stateModel.medicalColleges!=null

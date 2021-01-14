@@ -37,6 +37,7 @@ class CustomDoubleLineGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     var seriesList = _createSampleData(data);
     return charts.TimeSeriesChart(seriesList, animate: true);
+
   }
 
   static List<charts.Series<GlobalCaseModel, DateTime>> _createSampleData(List<GlobalCaseModel> data) {

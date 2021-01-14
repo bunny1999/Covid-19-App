@@ -64,14 +64,14 @@ class MedicalCollegeCard extends StatelessWidget {
               medicalCollegeModel.ownership!=null?Container(
                 margin: EdgeInsets.only(bottom: 8.0),
                 padding: EdgeInsets.symmetric(vertical: 1,horizontal: 3),
-                color: Colors.grey.shade100,
-                child: Text(medicalCollegeModel.ownership,style: TextStyle(color: Colors.grey),)
+                color: primaryColorLite,
+                child: Text(medicalCollegeModel.ownership,style: TextStyle(color: Colors.white),)
               ):null,
               medicalCollegeModel.name!=null
                 ?Text(medicalCollegeModel.name,textScaleFactor: 1.3)
                 :null,
               HospitalCard(
-                ruralStr: "Admission Capacity",
+                ruralStr: "Admis. Capacity",
                 ruralValue: medicalCollegeModel.admissionCapacity,
                 urbanStr: "Hospital Beds",
                 urbanValue: medicalCollegeModel.hospitalBeds,
