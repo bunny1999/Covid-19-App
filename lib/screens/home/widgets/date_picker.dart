@@ -51,7 +51,8 @@ class _DatePickerState extends State<DatePicker> {
       },
       child: RoundCornerContainer(
         borderColor: bgGraphColor,
-        child:Text("$selectedDate".split(' ')[0],textScaleFactor: 1.2,)
+        color: primaryColorLite,
+        child:Text("$selectedDate".split(' ')[0],textScaleFactor: 1.2,style: TextStyle(color: Colors.white),)
       )
     );
   }

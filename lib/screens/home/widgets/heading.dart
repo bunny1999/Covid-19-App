@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Heading extends StatelessWidget {
   String text;
-  Heading(text);
+  Heading(this.text);
   @override
   Widget build(BuildContext context) {
     return Container(

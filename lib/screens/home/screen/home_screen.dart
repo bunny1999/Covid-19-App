@@ -9,6 +9,7 @@ import 'package:covid_app/screens/home/widgets/date_picker.dart';
 import 'package:covid_app/screens/home/widgets/drop_down.dart';
 import 'package:covid_app/screens/home/widgets/graph_continer.dart';
 import 'package:covid_app/screens/home/widgets/heading.dart';
+import 'package:covid_app/screens/home/widgets/hospital_card.dart';
 import 'package:covid_app/screens/home/widgets/round_croner_container.dart';
 import 'package:covid_app/screens/home/widgets/sub_container.dart';
 import 'package:covid_app/screens/notification_screen.dart';
@@ -151,57 +152,64 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                             )
                         ),
                         SizedBox(height: 8,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            DatePicker(
-                              selectedDate: _startDate,
-                              onChange: (date) async{
-                                if(_activeStateModelNotifi!=null)
-                                  _activeCaseDateRange.value=await getCasesDateRanger(
-                                    startDate: date,
-                                    endDate: _endDate,
-                                    stateCases: _activeCaseDateRange.value
-                                  );
-                                else{
-                                  _activeCaseDateRange.value=await getGlobalCasesDateRanger(
-                                    startDate: date,
-                                    endDate: _endDate,
-                                    globalCases: _activeCaseDateRange.value
-                                  );
-                                }
-                              },
-                            ),
-                            RoundCornerContainer(
-                              color: bgGraphColor,
-                              child: Text("To",textScaleFactor: 1.2,),
-                            ),
-                            DatePicker(
-                              selectedDate: _endDate,
-                              onChange: (date) async{
-                                if(_activeStateModelNotifi!=null)
-                                  _activeCaseDateRange.value=await getCasesDateRanger(
-                                    startDate: _startDate,
-                                    endDate: date,
-                                    stateCases: _activeCaseDateRange.value
-                                  );
-                                else{
-                                  _activeCaseDateRange.value=await getGlobalCasesDateRanger(
-                                    startDate: _startDate,
-                                    endDate: date,
-                                    globalCases: _activeCaseDateRange.value
-                                  );
-                                }
-                              },
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 10,),
-                        _activeStateModelNotifi!=null
-                          ?StateDeatils(
-                            stateModel: _activeStateModelNotifi,
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 5.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:[
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                DatePicker(
+                                  selectedDate: _startDate,
+                                  onChange: (date) async{
+                                    if(_activeStateModelNotifi!=null)
+                                      _activeCaseDateRange.value=await getCasesDateRanger(
+                                        startDate: date,
+                                        endDate: _endDate,
+                                        stateCases: _activeCaseDateRange.value
+                                      );
+                                    else{
+                                      _activeCaseDateRange.value=await getGlobalCasesDateRanger(
+                                        startDate: date,
+                                        endDate: _endDate,
+                                        globalCases: _activeCaseDateRange.value
+                                      );
+                                    }
+                                  },
+                                ),
+                                RoundCornerContainer(
+                                  color: bgGraphColor,
+                                  child: Text("To",textScaleFactor: 1.2,),
+                                ),
+                                DatePicker(
+                                  selectedDate: _endDate,
+                                  onChange: (date) async{
+                                    if(_activeStateModelNotifi!=null)
+                                      _activeCaseDateRange.value=await getCasesDateRanger(
+                                        startDate: _startDate,
+                                        endDate: date,
+                                        stateCases: _activeCaseDateRange.value
+                                      );
+                                    else{
+                                      _activeCaseDateRange.value=await getGlobalCasesDateRanger(
+                                        startDate: _startDate,
+                                        endDate: date,
+                                        globalCases: _activeCaseDateRange.value
+                                      );
+                                    }
+                                  },
+                                )
+                              ]),
+                              SizedBox(height: 10,),
+                              _activeStateModelNotifi!=null
+                                ?StateDeatils(
+                                  stateModel: _activeStateModelNotifi,
+                                )
+                                :GlobalDetails(),
+                            ]
                           )
-                          :GlobalDetails()
+                        )
                       ],
                     ),
                   );
@@ -244,72 +252,57 @@ class StateDeatils extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           stateModel.helplineNumber!=null && stateModel.helplineNumber.length>=10
           ?Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Heading("Helpline"),
               SubContainers(
-              child: ListTile(
-                title: Text(stateModel.helplineNumber),
-                trailing: IconButton(
-                  icon: Icon(Icons.call),
-                  onPressed: () async{
-                    await _makePhoneCall(stateModel.helplineNumber);
-                  },
-                ),
+                child: ListTile(
+                  title: Text(stateModel.helplineNumber),
+                  trailing: IconButton(
+                    icon: Icon(Icons.call,color: primaryColor,),
+                    onPressed: () async{
+                      await _makePhoneCall(stateModel.helplineNumber);
+                    },
+                  ),
+                )
               )
-            )
             ],
           )
           :null,
-        ],
-      ),
-    );
-  }
-}
-
-class SuggestCity extends StatelessWidget {
-  final animationSlideUp,state;
-  SuggestCity({@required this.animationSlideUp,@required this.state});
-
-  @override
-  Widget build(BuildContext context) {
-    final appBloc = BlocProvider.of<AppBloc>(context);
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            child: Text("Also Check",textScaleFactor: 1.1,style: TextStyle(fontWeight: FontWeight.bold),)),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              // child: GridView.count(
-              //   physics: NeverScrollableScrollPhysics(),
-              //   //TODO:
-              //   childAspectRatio: 1.5,
-              //   crossAxisCount: 2,
-              //   children: state.getNearbyCites.map<Widget>((NearbyCityModel nCM){
-              //     return SlideTransition(
-              //       position: animationSlideUp,
-              //       child: GestureDetector(
-              //         onTap: (){
-              //           appBloc.add(FeatchWeather(lat: nCM.lat,long:nCM.long));
-              //         },
-              //         child: GridCard(
-              //           cityName: nCM.name,
-              //           cityTemp: nCM.temp
-              //         )
-              //       ),
-              //     );
-              //   }).toList(),
-              // ),
-            )
+          Heading("Hospitals"),
+          HospitalCard(
+            ruralStr: "Rural Hospitals",
+            ruralValue: stateModel.ruralHospitals,
+            urbanStr: "Urban Hospitals",
+            urbanValue: stateModel.urbanHospitals
           ),
+          Heading("Beds"),
+          HospitalCard(
+            ruralStr: "Rural Beds",
+            ruralValue: stateModel.ruralBeds,
+            urbanStr: "Urban Beds",
+            urbanValue: stateModel.urbanBeds
+          ),
+          Heading("Medical Colleges"),
+          SubContainers(
+            child: ListTile(
+              onTap: (){
+
+              },
+              leading: Text(stateModel.medicalColleges!=null
+                ?stateModel.medicalColleges.length.toString():"0",textScaleFactor: 1.5,style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              title: Text("Medical Colleges",textScaleFactor: 1.0,style: TextStyle(fontWeight: FontWeight.w500)),
+              trailing: Icon(Icons.forward,color: primaryColor,),
+            ),
+          ),
+          SizedBox(height: 10.0,)
         ],
       ),
     );
   }
 }
-
